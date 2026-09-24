@@ -1,0 +1,9 @@
+1) python -m venv venv
+2) [дальше активировать venv]
+3) pip install -r requirements.txt
+4) если нужно чтобы aider коммитил нормально, патч: python -c "import aider.repo, pathlib; p = pathlib.Path(aider.repo.__file__); p.write_text(p.read_text().replace('system_content.format(language_instruction=language_instruction)', 'system_content.replace(\"{language_instruction}\", language_instruction)'))"
+
+5) python config/manage.py runserver
+в другом окне:
+6) cd vite-project
+7) npm run dev
