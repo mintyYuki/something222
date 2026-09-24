@@ -19,3 +19,192 @@
 +1. Вноси изменения ТОЛЬКО в те файлы, которые явно указаны в запросе или добавлены через /add.
 +2. Не переписывай файлы целиком, если требуется добавить небольшую функцию.
 +3. Не чисти и не изменяй настройки CORS/JWT без прямого указания.
+
+# 2026-09-24 12:38:17.382865
++n
+
+# 2026-09-24 12:38:17.524232
++Вы работаете в режиме точечной разработки над Fullstack-проектом.
++Структура: /backend (Django REST) и /frontend (React Vite).
++
++СТРОГИЕ ПРАВИЛА ДЛЯ FLASH LITE:
++1. Вноси изменения ТОЛЬКО в те файлы, которые явно указаны в запросе или добавлены через /add.
++2. Не переписывай файлы целиком, если требуется добавить небольшую функцию.
++3. Не чисти и не изменяй настройки CORS/JWT без прямого указания.
+
+# 2026-09-24 12:38:17.524268
++Вы работаете в режиме точечной разработки над Fullstack-проектом.
++Структура: /backend (Django REST) и /frontend (React Vite).
++
++СТРОГИЕ ПРАВИЛА ДЛЯ FLASH LITE:
++1. Вноси изменения ТОЛЬКО в те файлы, которые явно указаны в запросе или добавлены через /add.
++2. Не переписывай файлы целиком, если требуется добавить небольшую функцию.
++3. Не чисти и не изменяй настройки CORS/JWT без прямого указания.
+
+# 2026-09-24 12:41:08.144850
++n
+
+
+# 2026-09-24 12:56:29.550792
++/add config/config/settings.py
+
+# 2026-09-24 12:56:39.947912
++"В файле config/config/settings.py выполни следующие настройки:
++1. Добавь 'rest_framework', 'corsheaders' и 'authentication' в массив INSTALLED_APPS.
++2. Добавь 'corsheaders.middleware.CorsMiddleware' в самое начало массива MIDDLEWARE.
++3. Добавь параметр CORS_ALLOW_ALL_ORIGINS = True.
++4. Создай словарь REST_FRAMEWORK и установи DEFAULT_AUTHENTICATION_CLASSES на ('rest_framework_simplejwt.authentication.JWTAuthentication',)."
+
+# 2026-09-24 13:04:53.646860
++n
+
+# 2026-09-24 13:07:53.612940
++/drop config/config/settings.py
+
+# 2026-09-24 13:07:57.610374
++/add config/authentication/serializers.py
+
+# 2026-09-24 13:09:01.461510
++y
+
+# 2026-09-24 13:09:09.733914
++"В файле config/authentication/serializers.py создай RegisterSerializer на основе serializers.ModelSerializer для стандартной модели User из django.contrib.auth.models.
++Поля: username, email, password.
++Поле password должно иметь параметр write_only=True.
++Реализуй метод create(validated_data), который использует User.objects.create_user для хеширования пароля."
+
+# 2026-09-24 13:09:59.142609
++n
+
+# 2026-09-24 13:10:50.741917
++/drop config/authentication/serializers.py
+
+# 2026-09-24 13:10:54.171795
++/add config/authentication/views.py
+
+# 2026-09-24 13:10:56.293302
++y
+
+# 2026-09-24 13:11:02.513514
++/add config/authentication/urls.py
+
+# 2026-09-24 13:11:03.751559
++y
+
+# 2026-09-24 13:11:31.363670
++"1. В файле config/authentication/views.py создай RegisterView (generics.CreateAPIView), использующий RegisterSerializer и permission_classes = [AllowAny].
++2. Создай UserProfileView (APIView) с permission_classes = [IsAuthenticated], который на GET-запрос возвращает JSON с username и email текущего request.user.
++3. В файле config/authentication/urls.py настройте следующие маршруты:
++- path('register/', RegisterView.as_view())
++- path('login/', TokenObtainPairView.as_view()) из rest_framework_simplejwt.views
++- path('refresh/', TokenRefreshView.as_view()) из rest_framework_simplejwt.views
++- path('me/', UserProfileView.as_view())"
+
+# 2026-09-24 13:11:44.997452
++n
+
+# 2026-09-24 13:14:26.273277
++no
+
+# 2026-09-24 13:14:27.876368
++/add config/config/settings.py
+
+# 2026-09-24 13:14:32.622820
++"Добавь в файл config/config/settings.py следующие библиотеки и настройки:
++1. В INSTALLED_APPS добавь: 'rest_framework', 'corsheaders', 'authentication', 'rest_framework_simplejwt'.
++2. В MIDDLEWARE добавь 'corsheaders.middleware.CorsMiddleware' в самое начало.
++3. Пропиши параметр CORS_ALLOW_ALL_ORIGINS = True.
++4. Добавь настройки REST_FRAMEWORK для использования JWT аутентификации по умолчанию через SimpleJWT."
+
+# 2026-09-24 13:14:54.142654
++/drop config/config/settings.py
++/add config/authentication/serializers.py
++/add config/authentication/views.py
++/add config/authentication/urls.py
+
+# 2026-09-24 13:15:00.742663
++/add config/authentication/serializers.py
+
+# 2026-09-24 13:15:03.894914
++/add config/authentication/views.py
+
+# 2026-09-24 13:15:06.840326
++/add config/authentication/urls.py
+
+# 2026-09-24 13:15:11.564727
++"1. В файле config/authentication/serializers.py создай RegisterSerializer (на основе ModelSerializer для User) с полями username, email, password (password с параметром write_only=True) и методом create для корректного хэширования пароля.
++2. В файле config/authentication/views.py создай RegisterView (generics.CreateAPIView) и защищенный UserProfileView (APIView с IsAuthenticated), возвращающий username и email текущего пользователя.
++3. В файле config/authentication/urls.py пропиши эндпоинты с префиксом api/v1/auth/:
++- POST /api/v1/auth/register/ -> RegisterView.as_view()
++- POST /api/v1/auth/login/ -> TokenObtainPairView.as_view() (из rest_framework_simplejwt.views)
++- POST /api/v1/auth/refresh/ -> TokenRefreshView.as_view() (из rest_framework_simplejwt.views)
++- GET /api/v1/auth/me/ -> UserProfileView.as_view()"
+
+# 2026-09-24 13:15:37.837577
++/run python config/manage.py migrate
+
+# 2026-09-24 13:16:30.162165
++n
+
+# 2026-09-24 13:16:31.468798
++./venv/bin/pip install djangorestframework django-cors-headers djangorestframework-simplejwt
+
+# 2026-09-24 13:17:54.350356
++/run python config/manage.py migrate
+
+# 2026-09-24 13:17:57.494586
++т
+
+# 2026-09-24 13:17:59.467102
++n
+
+# 2026-09-24 13:18:23.460284
++/add vite-project/src/api/axios.js
+
+# 2026-09-24 13:18:24.887558
++y
+
+# 2026-09-24 13:18:31.229066
++"Создай файл vite-project/src/api/axios.js с настроенным инстансом axios. Базовый URL установи как http://localhost:8000/api/v1/. Добавь request-интерцептор, который автоматически подставляет заголовок Authorization: Bearer <token> из localStorage, если он там есть."
+
+# 2026-09-24 13:18:53.657240
++y
+
+# 2026-09-24 13:19:58.244076
++/add vite-project/src/components/RegisterForm.jsx
+
+# 2026-09-24 13:20:03.525483
++/add vite-project/src/components/LoginForm.jsx
+
+# 2026-09-24 13:20:05.278227
++y
+
+# 2026-09-24 13:20:06.624581
++/add vite-project/src/components/LoginForm.jsx
+
+# 2026-09-24 13:20:08.259826
++y
+
+# 2026-09-24 13:20:15.607963
++"1. В файле vite-project/src/components/RegisterForm.jsx создай форму регистрации с полями username, email, password, отправляющую POST-запрос на auth/register/.
++2. В файле vite-project/src/components/LoginForm.jsx создай форму входа с полями username и password, отправляющую запрос на auth/login/, сохраняющую полученный JWT-токен в localStorage и перенаправляющую на профиль."
+
+# 2026-09-24 13:20:34.755937
++/add vite-project/src/App.jsx
+
+# 2026-09-24 13:20:38.616226
++/add vite-project/src/components/ProtectedRoute.jsx
+
+# 2026-09-24 13:20:40.214264
++y
+
+# 2026-09-24 13:20:52.421999
++"1. Создай компонент vite-project/src/components/ProtectedRoute.jsx для защиты роутов (проверяет наличие токена в localStorage).
++2. В vite-project/src/App.jsx настрой react-router-dom, подключив страницы логина, регистрации и защищенный роут /profile.
++3. На странице /profile реализовать загрузку данных пользователя через GET /api/v1/auth/me/ с помощью созданного axios-клиента, вывод username/email и кнопку «Выйти» (очистка localStorage и редирект на логин)."
+
+# 2026-09-24 13:21:09.978498
++/run cd vite-project && npm run lint
+
+# 2026-09-24 13:23:47.710499
++y

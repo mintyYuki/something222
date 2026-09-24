@@ -19,4 +19,4 @@ map-refresh: auto
 
 # --- Автоматическое тестирование и линтинг ---
 auto-test: true
-test-cmd: cd frontend && npm run lint
+test-cmd: cd vite-project && npm run lint
