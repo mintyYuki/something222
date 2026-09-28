@@ -19,17 +19,15 @@ function App() {
           <Route path="/register" element={<RegisterForm />} />
           <Route path="/" element={
             <ProtectedRoute>
-              <MainLayout>
-                <Routes>
-                  <Route path="dashboard" element={<DashboardPage />} />
-                  <Route path="about" element={<AboutPage />} />
-                  <Route path="settings" element={<SettingsPage />} />
-                  <Route path="profile" element={<ProfilePage />} />
-                  <Route path="/" element={<Navigate to="/dashboard" />} />
-                </Routes>
-              </MainLayout>
+              <MainLayout />
             </ProtectedRoute>
-          } />
+          }>
+            <Route index element={<Navigate to="dashboard" replace />} />
+            <Route path="dashboard" element={<DashboardPage />} />
+            <Route path="about" element={<AboutPage />} />
+            <Route path="settings" element={<SettingsPage />} />
+            <Route path="profile" element={<ProfilePage />} />
+          </Route>
         </Routes>
       </Router>
     </AuthProvider>
