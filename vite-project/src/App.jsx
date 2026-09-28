@@ -1,44 +1,33 @@
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import RegisterForm from './components/RegisterForm';
 import LoginForm from './components/LoginForm';
 import ProtectedRoute from './components/ProtectedRoute';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { AuthProvider } from './context/AuthContext';
+import MainLayout from './components/Layout/MainLayout';
+import DashboardPage from './pages/DashboardPage';
+import AboutPage from './pages/AboutPage';
+import SettingsPage from './pages/SettingsPage';
+import ProfilePage from './pages/ProfilePage';
 import './App.css';
-
-function Profile() {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
-
-  if (!user) return <div>Loading...</div>;
-
-  return (
-    <div>
-      <h1>Profile</h1>
-      <p>Username: {user.username}</p>
-      <p>Email: {user.email}</p>
-      <button onClick={handleLogout}>Logout</button>
-    </div>
-  );
-}
 
 function App() {
   return (
     <AuthProvider>
       <Router>
-        <nav>
-          <Link to="/login">Login</Link> | <Link to="/register">Register</Link> | <Link to="/profile">Profile</Link>
-        </nav>
         <Routes>
-          <Route path="/register" element={<RegisterForm />} />
           <Route path="/login" element={<LoginForm />} />
-          <Route path="/profile" element={
+          <Route path="/register" element={<RegisterForm />} />
+          <Route path="/" element={
             <ProtectedRoute>
-              <Profile />
+              <MainLayout>
+                <Routes>
+                  <Route path="dashboard" element={<DashboardPage />} />
+                  <Route path="about" element={<AboutPage />} />
+                  <Route path="settings" element={<SettingsPage />} />
+                  <Route path="profile" element={<ProfilePage />} />
+                  <Route path="/" element={<Navigate to="/dashboard" />} />
+                </Routes>
+              </MainLayout>
             </ProtectedRoute>
           } />
         </Routes>
