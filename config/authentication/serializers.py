@@ -3,6 +3,8 @@ from rest_framework import serializers
 from .models import UserProfile
 
 class RegisterSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(required=False, allow_blank=True)
+
     class Meta:
         model = User
         fields = ('username', 'email', 'password')
@@ -11,7 +13,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(
             username=validated_data['username'],
-            email=validated_data.get('email'),
+            email=validated_data.get('email', ''),
             password=validated_data['password']
         )
         return user
