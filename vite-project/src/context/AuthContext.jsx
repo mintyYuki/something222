@@ -15,6 +15,7 @@ export const AuthProvider = ({ children }) => {
         .catch(() => {
           localStorage.removeItem('access');
           localStorage.removeItem('refresh');
+          setUser(null);
         })
         .finally(() => setLoading(false));
     } else {
