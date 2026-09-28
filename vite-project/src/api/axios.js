@@ -17,4 +17,17 @@ api.interceptors.request.use(
   }
 );
 
+// Add response interceptor to handle 401 errors without infinite loops
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('access');
+      localStorage.removeItem('refresh');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default api;

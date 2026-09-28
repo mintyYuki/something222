@@ -9,18 +9,21 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const token = localStorage.getItem('access');
-    if (token) {
-      api.get('auth/me/')
-        .then(res => setUser(res.data))
-        .catch(() => {
-          localStorage.removeItem('access');
-          localStorage.removeItem('refresh');
-          setUser(null);
-        })
-        .finally(() => setLoading(false));
-    } else {
+    
+    if (!token) {
       setLoading(false);
+      setUser(null);
+      return;
     }
+
+    api.get('auth/me/')
+      .then(res => setUser(res.data))
+      .catch(() => {
+        localStorage.removeItem('access');
+        localStorage.removeItem('refresh');
+        setUser(null);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   const login = async (username, password) => {
