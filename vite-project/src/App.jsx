@@ -1,24 +1,16 @@
-import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import RegisterForm from './components/RegisterForm';
 import LoginForm from './components/LoginForm';
 import ProtectedRoute from './components/ProtectedRoute';
-import api from './api/axios';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import './App.css';
 
 function Profile() {
-  const [user, setUser] = useState(null);
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    api.get('auth/me/')
-      .then(res => setUser(res.data))
-      .catch(() => handleLogout());
-  }, []);
-
   const handleLogout = () => {
-    localStorage.removeItem('access');
-    localStorage.removeItem('refresh');
+    logout();
     navigate('/login');
   };
 
@@ -36,20 +28,22 @@ function Profile() {
 
 function App() {
   return (
-    <Router>
-      <nav>
-        <Link to="/login">Login</Link> | <Link to="/register">Register</Link> | <Link to="/profile">Profile</Link>
-      </nav>
-      <Routes>
-        <Route path="/register" element={<RegisterForm />} />
-        <Route path="/login" element={<LoginForm />} />
-        <Route path="/profile" element={
-          <ProtectedRoute>
-            <Profile />
-          </ProtectedRoute>
-        } />
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <nav>
+          <Link to="/login">Login</Link> | <Link to="/register">Register</Link> | <Link to="/profile">Profile</Link>
+        </nav>
+        <Routes>
+          <Route path="/register" element={<RegisterForm />} />
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/profile" element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          } />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 
