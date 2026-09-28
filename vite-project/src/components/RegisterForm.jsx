@@ -9,29 +9,20 @@ function RegisterForm() {
   const { register } = useAuth();
   const navigate = useNavigate();
 
-  const validate = () => {
-    const newErrors = {};
-    if (!formData.username) newErrors.username = 'Username is required';
-    if (!formData.email.includes('@')) newErrors.email = 'Invalid email format';
-    if (formData.password.length < 8) newErrors.password = 'Password must be at least 8 characters';
-    return newErrors;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-
     setLoading(true);
+    setErrors({});
     try {
       await register(formData);
-      alert('Registration successful!');
+      alert('Регистрация успешна!');
       navigate('/login');
-    } catch (error) {
-      setErrors({ form: 'Registration failed. Please try again.' });
+    } catch (err) {
+      if (err.response?.data) {
+        setErrors(err.response.data);
+      } else {
+        setErrors({ form: 'Ошибка регистрации. Попробуйте снова.' });
+      }
     } finally {
       setLoading(false);
     }
@@ -40,22 +31,25 @@ function RegisterForm() {
   const isFormValid = formData.username && formData.email && formData.password;
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input type="text" placeholder="Username" onChange={(e) => setFormData({...formData, username: e.target.value})} />
-      {errors.username && <p style={{color: 'red'}}>{errors.username}</p>}
-      
-      <input type="email" placeholder="Email" onChange={(e) => setFormData({...formData, email: e.target.value})} />
-      {errors.email && <p style={{color: 'red'}}>{errors.email}</p>}
-      
-      <input type="password" placeholder="Password" onChange={(e) => setFormData({...formData, password: e.target.value})} />
-      {errors.password && <p style={{color: 'red'}}>{errors.password}</p>}
-      
-      {errors.form && <p style={{color: 'red'}}>{errors.form}</p>}
-      
-      <button type="submit" disabled={loading || !isFormValid}>
-        {loading ? 'Загрузка...' : 'Register'}
-      </button>
-    </form>
+    <div className="animate-slide-in">
+      <form onSubmit={handleSubmit}>
+        <h2>Register</h2>
+        <input type="text" placeholder="Username" onChange={(e) => setFormData({...formData, username: e.target.value})} />
+        {errors.username && <p style={{color: 'red'}}>{errors.username[0]}</p>}
+        
+        <input type="email" placeholder="Email" onChange={(e) => setFormData({...formData, email: e.target.value})} />
+        {errors.email && <p style={{color: 'red'}}>{errors.email[0]}</p>}
+        
+        <input type="password" placeholder="Password" onChange={(e) => setFormData({...formData, password: e.target.value})} />
+        {errors.password && <p style={{color: 'red'}}>{errors.password[0]}</p>}
+        
+        {errors.form && <p style={{color: 'red'}}>{errors.form}</p>}
+        
+        <button type="submit" disabled={loading || !isFormValid}>
+          {loading ? 'Загрузка...' : 'Register'}
+        </button>
+      </form>
+    </div>
   );
 }
 
