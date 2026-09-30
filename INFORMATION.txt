@@ -2,8 +2,17 @@
 2) [дальше активировать venv]
 3) pip install -r requirements.txt
 4) если нужно чтобы aider коммитил нормально, патч: python -c "import aider.repo, pathlib; p = pathlib.Path(aider.repo.__file__); p.write_text(p.read_text().replace('system_content.format(language_instruction=language_instruction)', 'system_content.replace(\"{language_instruction}\", language_instruction)'))"
+5) python config/manage.py migrations
+6) python config/manage.py runserver
 
-5) python config/manage.py runserver
-в другом окне:
+если runserver не стартует и не находит таблицу, это может быть из-за отсутствующих __init__ файлов. решил через makemigrations
+
+в другом терминале (venv тут не нужен):
 6) cd vite-project
-7) npm run dev
+7) npm i
+8) npm run dev
+
+известные баги:
+1) дефолтной авы нормально работающей нет
+2) по дефолту иногда кидает на /login, когда юзер не зареган (пока не понял когда это проявляется). решение - поменять путь в адресной строке на /register и зарегаться вручную
+3) дизайн кривой но в целом норм для нейронки
